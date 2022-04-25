@@ -1,25 +1,25 @@
-# 문제 단순화
-# 수식 : progresses[0] + time*speeds[0] -> time을 고려
-# 1. 100을 초과하는 경우 :
-    # (1) count를 answer에 반환
-    # (2) 첫번째 원소 삭제
-# 2. 100을 초과하지 않는 경우 :
-    # (1) time을 늘려가며 반복
-
+# 1. 시간이 1씩 계속 더해짐
+# 2. 7초일때 첫번째 값의 연산이 필요함 -> cnt 더해
+# 3. 7초일때 두번째 값의 연산 결과? --> cnt 더해
+# 4. 7초일때 세번재 값의 연산 결과? --> cnt 초기화 & 정답에 추가
+# 5. 위의 과정 반복
+# 6. 마지막 cnt 정답에 추가
 
 def solution(progresses, speeds):
-    answer = []
+    q = []
     time = 0
-    count = 0
-    while len(progresses)> 0:
-        if (progresses[0] + time*speeds[0]) >= 100:
-            progresses.pop(0) # pop(n) : n번째 항목을 삭제하고, 그 항목을 반환함(n 지정 안하면 마지막꺼로 지정됨)
-            speeds.pop(0)
-            count += 1
-        else:
-            if count > 0:
-                answer.append(count)
-                count = 0
+    cnt = 0
+
+    while (len(progresses) > 0):
+        if (progresses[0] + speeds[0] * time < 100):
             time += 1
-    answer.append(count)
-    return answer
+            if (cnt > 0):
+                q.append(cnt)
+                cnt = 0
+
+        else:
+            cnt += 1
+            progresses.pop(0)
+            speeds.pop(0)
+    q.append(cnt)
+    return q
