@@ -1,18 +1,23 @@
-# 큐 관리 : 큐에서 하나씩 꺼내서 수행할 수 있으면 하고 아니면 다시 넣는다.
-# 1. Queue를 만든다.
-# 2. 나보다 중요한 job이 있으면 뒤에 넣는다.
-# 3. 내가 제일 중요하다면 수행하고, location과 비교한다.
+# 1. pop, get 사용
+# 2. queue 만들기 : priorities가 사실상 대기행렬임.
+# 3. return = location이 출력되는 순서 = turn
+# 4. 작업에 대한 정의
+#    (1) printer에서 꺼낸다(pop)
+#    (2) 우선순위를 비교한다. (any)
+#    (3) 우선순위가 높은게 있으면 다시 집어넣는다. (append)
+#    (4) 우선순위가 높은게 없다면 출력한다. (출력 횟수 turn 증가)
+#    (5) 출력하는 것 중 location과 idx가 동일한지 확인한다.
 
 def solution(priorities, location):
-    printer = [(i, p) for i, p in enumerate(priorities)]  # enumerate : 집합의 인덱스와 값을 반환함.
+    printer = [(i, p) for i, p in enumerate(priorities)]
     turn = 0
 
-    while printer:  # printer에 job이 남아있을 때까지 반복한다.
-        job = printer.pop(0)  # pop(n) : 집합의 n번째 원소를 삭제하고, 반환함
-        if any(job[1] < other_job[1] for other_job in printer): # any(수식) : 수식을 만족하는 경우가 하나라도 있는지 확인
-            printer.append(job)
+    while (len(printer) > 0):
+        job = printer.pop(0)  # 대기행렬 printer의 0번째를 삭제 & 반환
+        if any(job[1] < other_job[1] for other_job in printer):  # any(수식) : 하나라도 있다면 True 반환
+            printer.append(job)  # job[1] : printer의 idx를 반환
         else:
             turn += 1
             if job[0] == location:
-                break;
+                break
     return turn
